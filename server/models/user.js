@@ -54,6 +54,25 @@ UserSchema.methods.generateAuthToken = function() {
   });
 };
 
+// statics faz virar um model method (tipo uma função static no java)
+UserSchema.statics.findByToken = function(token) {
+  var User = this;
+  var decoded;
+
+  try {
+    decoded = jwt.verify(token, '123abc');
+  } catch(e) {
+    return Promise.reject();
+  }
+
+  return User.findOne({
+    '_id': decoded._id,
+    'tokens.token': token,    // quotes are required when there is a dot in the value
+    'tokens.access': 'auth'
+  });
+
+};
+
 var User = mongoose.model('User', UserSchema);
 
 module.exports = {User};
