@@ -33,7 +33,7 @@ var UserSchema = new mongoose.Schema({
   }]
 });
 
-// Overriding the original method
+// Override the original method para enviar somente o _id e email
 UserSchema.methods.toJSON = function() {
   var user = this;
   var userObject = user.toObject();
