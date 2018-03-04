@@ -46,7 +46,7 @@ UserSchema.methods.generateAuthToken = function() {
   // ver aula 90. Generating Auth Tokens and Setting Headers 5:00
   var user = this;  // O this se refere ao document que chamou essa função
   var access = 'auth';
-  var token = jwt.sign({_id: user._id.toHexString(), access}, '123abc').toString();
+  var token = jwt.sign({_id: user._id.toHexString(), access}, process.env.JWT_SECRET).toString();
 
   user.tokens = user.tokens.concat([{access, token}]);
 
@@ -71,7 +71,7 @@ UserSchema.statics.findByToken = function(token) {
   var decoded;
 
   try {
-    decoded = jwt.verify(token, '123abc');
+    decoded = jwt.verify(token, process.env.JWT_SECRET);
   } catch(e) {
     return Promise.reject();
   }
